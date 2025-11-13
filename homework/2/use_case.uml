@@ -1,0 +1,56 @@
+digraph UserCaseDiagram {
+    rankdir=LR;
+    node [shape=box];
+
+    // Define Actor
+    actor [shape=none, label="Player\n(Actor)"];
+
+    // Define System Boundary
+    subgraph cluster_system {
+        label = "Sugar Glider Pet Simulator System";
+
+        // Use Cases Group 1: Learning Care Knowledge (User Story 1)
+        subgraph cluster_story1 {
+            label = "Learning Care Knowledge (User Story 1)";
+
+            UC1_1 [label="Create Virtual Sugar Glider Object\n(Pet Object)"];
+            UC1_2 [label="Design Feeding Function\n(Feed)"];
+            UC1_3 [label="Design Cleaning Function\n(Clean)"];
+            UC1_4 [label="Design Interaction Function\n(Interact)"];
+            UC1_5 [label="Beginner Tutorial Mode\n(Tutorial)"];
+            UC1_6 [label="Establish Knowledge Prompt\n(Knowledge Prompt)", shape=oval]; // Extend Case
+        }
+
+        // Use Cases Group 2: Building Responsibility (User Story 2)
+        subgraph cluster_story2 {
+            label = "Building Responsibility (User Story 2)";
+
+            UC2_1 [label="Establish Growth Log System\n(Growth Log)"];
+            UC2_2 [label="Design Health Value System\n(Health System)"];
+            UC2_3 [label="Design Lifespan/Age Parameter\n(Age Parameter)"];
+            UC2_4 [label="Design Status History Chart\n(History Chart)"];
+            UC2_5 [label="Set Reminder Notifications\n(Reminder)"];
+        }
+
+        // Player to Main Use Cases
+        actor -> UC1_2;
+        actor -> UC1_3;
+        actor -> UC1_4;
+        actor -> UC1_5;
+        actor -> UC2_4;
+
+        // Include Relationships (Mandatory use of another case)
+        UC1_2 -> UC1_1 [label="<<include>>", style=dashed, arrowhead=open];
+        UC1_3 -> UC1_1 [label="<<include>>", style=dashed, arrowhead=open];
+        UC1_4 -> UC1_1 [label="<<include>>", style=dashed, arrowhead=open];
+        UC2_2 -> UC1_1 [label="<<include>>", style=dashed, arrowhead=open];
+
+        // Extend Relationships (Optional triggered case)
+        UC1_2 -> UC1_6 [label="<<extend>>", style=dashed, arrowhead=open, fontcolor=red];
+        UC1_3 -> UC1_6 [label="<<extend>>", style=dashed, arrowhead=open, fontcolor=red];
+
+        // Internal System Relationships
+        UC2_1 -> UC2_2 [label="<<include>>", style=dashed, arrowhead=open];
+        UC2_5 -> UC1_2 [label="Remind Feeding", style=dashed, arrowhead=open];
+    }
+}

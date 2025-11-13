@@ -1,0 +1,50 @@
+@startuml SequenceDiagram
+actor Player
+participant UI as Game_Interface
+participant Logic as Game_Logic_Core
+participant Pet as Virtual_Sugar_Glider_Object
+database DB as Database_Log_System
+
+Player -> UI: Click [Feed] Button
+activate UI
+UI -> UI: Display Food Selection Menu
+deactivate UI
+
+Player -> UI: Select Food_A
+activate UI
+UI -> Logic: Call Feed(Food_A)
+deactivate UI
+activate Logic
+
+Logic -> Pet: Check Food Suitability(Food_A)
+activate Pet
+
+alt Food is Suitable
+    Pet --> Logic: Reply: Suitable
+    Logic -> Pet: Update Status (Hunger, Health +)
+    Pet --> Logic: Return New Status Values
+else Food is Unsuitable (e.g., Human Snack)
+    Pet --> Logic: Reply: Unsuitable
+    Logic -> UI: Display [Knowledge Prompt]
+    activate UI
+    UI --> Player: Show Warning Message
+    deactivate UI
+    Logic -> Pet: Update Status (Hunger +, Health -)
+    Pet --> Logic: Return New Status Values
+end
+
+deactivate Pet
+
+Logic -> DB: Log Daily Status Change/Feeding Action
+activate DB
+DB --> Logic: Log Success
+deactivate DB
+
+Logic -> UI: Send New Pet Status & Reaction
+activate UI
+UI --> Player: Display Glider Animation/Status Bar Update
+deactivate UI
+
+deactivate Logic
+
+@enduml

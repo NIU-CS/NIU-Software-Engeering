@@ -1,0 +1,41 @@
+digraph ActivityDiagram {
+    // Set flow direction
+    rankdir=TB;
+
+    // Define node style
+    node [shape=box];
+
+    // Define Start/End
+    start [shape=circle, label="", style=filled, fillcolor=black];
+    end [shape=doublecircle, label="", style=filled, fillcolor=black];
+
+    // Define Action Nodes
+    A [label="Player Initiates Feeding"];
+    B [label="Select Food Item"];
+    D [label="Calculate Status Change Values"];
+    E [label="Knowledge Prompt: Unsuitable Food"];
+    F [label="Update Sugar Glider Object Status"];
+    G [label="Update Growth Log"];
+    H [label="Display Sugar Glider Reaction"];
+
+    // Define Decision Node (Diamond)
+    C [shape=diamond, label="Is Food Suitable?"];
+
+    // Flow Connections
+    start -> A;
+    A -> B;
+    B -> C;
+
+    // Decision Branch
+    C -> D [label="Yes"];
+    C -> E [label="No (Wrong Food)"];
+
+    // Merge
+    E -> D [style=dashed];
+
+    // Subsequent Flow
+    D -> F;
+    F -> G;
+    G -> H;
+    H -> end;
+}
